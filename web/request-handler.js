@@ -16,6 +16,7 @@ exports.handleRequest = function (req, res) {
       //   console.log(doesExist);
       // });
       helpers.serveAssets(res);
+      archive.downloadUrl();
     }
     else if (req.url === '/users') {
     }
@@ -38,7 +39,7 @@ exports.handleRequest = function (req, res) {
       req.on('data', function(newUrl){
         console.log(newUrl.slice(4));
         archive.addUrlToList(newUrl.slice(4));
-      })
+      });
     }
   }
 

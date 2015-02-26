@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var http = require('http-request');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -25,12 +26,12 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(fn){
+exports.readListOfUrls = function(callback){
   fs.readFile(this.paths.list, function(err, data) {
     if(err) {
       throw err;
     } else {
-      fn(data);
+      callback(data);
     }
   });
 };
@@ -46,7 +47,7 @@ exports.isUrlInList = function(url, callback){
 exports.addUrlToList = function(url){
   // check if url already exist in list
   var context = this;
-  this.isUrlInList(url,function(doesExist){
+  this.isUrlInList(url, function(doesExist){
     if(!doesExist){
       fs.appendFile(context.paths.list, url, function(err){
         if(err) {
@@ -59,10 +60,31 @@ exports.addUrlToList = function(url){
 
 };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(url, callback){
   // check if site exists under archives/sites folder
+  fs.readFile(this.paths.archivedSites + '/' + url, function(err) {
+    // check if error *does not* exist, which means that it is archived
+    callback(!err);
+  });
 
 };
 
-exports.downloadUrls = function(){
+
+exports.downloadUrl = function(url){
+
+  var context = this;
+  http.get(url, function (err, res) {
+    if (err) {
+      throw (err);
+    }
+    // console.log(res.code, res.headers, res.buffer.toString());
+    fs.writeFile(context.paths.archivedSites + '/' + url, res.buffer.toString(), function (err) {
+      if (err) throw err;
+      console.log('ARCHIVE: Downloaded missing archives from site.txt');
+    });
+  });
+
 };
+
+
+
