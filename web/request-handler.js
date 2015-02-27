@@ -15,19 +15,22 @@ exports.handleRequest = function (req, res) {
       // archive.isUrlInList("www.google.com",function(doesExist){
       //   console.log(doesExist);
       // });
-      helpers.serveAssets(res);
-      archive.downloadUrl();
-    }
-    else if (req.url === '/users') {
+      helpers.serveAssets(res, './web/public/index.html');
+      // archive.downloadUrl();
     }
     else if (req.url.toString().match("www") !== null) {
       console.log('GET: Previously Processed URL');
       // console.log(req.url.toString().match("www") !== null);
       res.writeHead(200, {'Content-Type': 'text/html'});
-      res.end('google');
+      // TODO: Actually load the file
+      archive.isURLArchived(req.url, function(doesExist){
+        if (doesExist) {
+          helpers.serveAssets(res, './archives/sites' + req.url);
+        }
+      });
     }
     else {
-      console.log('GET: 404 - Not Found');
+      console.log('GET: 404 - Not Found; URL: ' + req.url);
       res.writeHead(404, {'Content-Type': 'text/plain'});
       res.end('404: Not Found');
     }
@@ -37,8 +40,17 @@ exports.handleRequest = function (req, res) {
       console.log('POST: New Sites');
       res.writeHead(302, {'Content-Type': 'text/html'});
       req.on('data', function(newUrl){
-        console.log(newUrl.slice(4));
-        archive.addUrlToList(newUrl.slice(4));
+        var url = newUrl.slice(4);
+
+        archive.isURLArchived(url, function(doesExist){
+          if (doesExist) {
+            helpers.serveAssets(res, './archives/sites/' + url);
+          } else {
+            archive.addUrlToList(url);
+            helpers.serveAssets(res, './web/public/loading.html');
+          }
+        });
+
       });
     }
   }

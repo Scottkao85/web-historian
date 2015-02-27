@@ -49,12 +49,14 @@ exports.addUrlToList = function(url){
   var context = this;
   this.isUrlInList(url, function(doesExist){
     if(!doesExist){
-      fs.appendFile(context.paths.list, url, function(err){
+      fs.appendFile(context.paths.list, "\n"+url, function(err){
         if(err) {
           throw err;
         }
         console.log('ARCHIVE: Added URL to site.txt')
       })
+    } else {
+
     }
   });
 
@@ -83,7 +85,6 @@ exports.downloadUrl = function(url){
       console.log('ARCHIVE: Downloaded missing archives from site.txt');
     });
   });
-
 };
 
 

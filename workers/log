@@ -1,0 +1,20 @@
+WORKER: Fetching new files to archive.
+WORKER: readListOfUrls - ["www.google.com","www.amazon.com","www.jimmyh.su","www.walmart.com","www.target.com","www.ebay.com","www.nasa.gov","www.test.com","www.yahoo.com"]
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: url
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
+WORKER: isArchived
